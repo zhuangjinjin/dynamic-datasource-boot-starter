@@ -22,4 +22,7 @@ ext {
     springBootVersion = '2.1.2.RELEASE'
     springVersion = '5.1.4.RELEASE'
     junitVersion = '5.3.1'
+    hikariVersion = '3.2.0'
+    mybatisVersion = "3.5.1"
+    aspectjVersion = "1.9.2"
 }

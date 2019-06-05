@@ -13,11 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-dependencies {
-    implementation "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
-    implementation "org.mybatis:mybatis:${mybatisVersion}"
-    implementation "org.springframework:spring-jdbc:${springVersion}"
-    implementation "com.zaxxer:HikariCP:${hikariVersion}"
-    implementation "org.aspectj:aspectjrt:${aspectjVersion}"
-    implementation "org.aspectj:aspectjweaver:${aspectjVersion}"
+package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.strategy;
+
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContextAware;
+
+import java.util.Set;
+
+/**
+ * @author ukuz90
+ * @since 2019-06-05
+ */
+public interface RoutingStrategy extends InitializingBean, ApplicationContextAware {
+
+    /**
+     * 选出数据源的Key
+     * @param key
+     * @return
+     */
+    String selectDataSourceKey(Set<String> key);
 }
