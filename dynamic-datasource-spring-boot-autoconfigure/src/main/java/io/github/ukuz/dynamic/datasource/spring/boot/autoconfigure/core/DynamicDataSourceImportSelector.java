@@ -26,7 +26,6 @@ public class DynamicDataSourceImportSelector implements ImportSelector {
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
         return new String[]{
-                DynamicRoutingDataSource.class.getName(),
                 RoutingStrategyFactoryBean.class.getName()
         };
     }

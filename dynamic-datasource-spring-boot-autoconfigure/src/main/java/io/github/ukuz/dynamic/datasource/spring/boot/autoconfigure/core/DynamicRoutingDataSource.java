@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
@@ -38,7 +40,7 @@ import java.util.stream.Stream;
  * @author ukuz90
  * @since 2019-06-04
  */
-public class DynamicRoutingDataSource extends AbstractRoutingDataSource implements InitializingBean, DisposableBean, ApplicationContextAware {
+public class DynamicRoutingDataSource extends AbstractRoutingDataSource implements BeanPostProcessor, DisposableBean, ApplicationContextAware {
 
     private ApplicationContext applicationContext;
     private DynamicDataSourceProperties dataSourceProperties;
@@ -68,6 +70,21 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
 
     @Override
     public void afterPropertiesSet() {
+        initDataSourceMap();
+        super.afterPropertiesSet();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+
+    private void initDataSourceMap() {
         dataSourceProperties = applicationContext.getBean(DynamicDataSourceProperties.class);
         if (dataSourceProperties.getProperties() != null) {
             Map<Object, Object> targetDataSource = new HashMap<>(dataSourceProperties.getProperties().length);
@@ -82,16 +99,5 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
             this.setTargetDataSources(targetDataSource);
         }
         routingStrategy = applicationContext.getBean(RoutingStrategy.class);
-    }
-
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    @Override
-    public void destroy() {
-
     }
 }

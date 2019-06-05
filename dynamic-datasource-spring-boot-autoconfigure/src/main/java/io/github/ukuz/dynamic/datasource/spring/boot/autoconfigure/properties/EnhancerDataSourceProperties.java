@@ -20,7 +20,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
 public class EnhancerDataSourceProperties extends DataSourceProperties {
 
-        private CrudType[] crudTypes;
+        private CrudType[] crudTypes = new CrudType[0];
 
         public CrudType[] getCrudTypes() {
             return crudTypes;

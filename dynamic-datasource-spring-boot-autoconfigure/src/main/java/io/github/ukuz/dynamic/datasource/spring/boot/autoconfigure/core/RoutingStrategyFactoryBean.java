@@ -16,7 +16,10 @@
 package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core;
 
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.strategy.RoutingStrategy;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.util.ServiceLoader;
 
@@ -24,7 +27,9 @@ import java.util.ServiceLoader;
  * @author ukuz90
  * @since 2019-06-05
  */
-public class RoutingStrategyFactoryBean implements FactoryBean<RoutingStrategy> {
+public class RoutingStrategyFactoryBean implements FactoryBean<RoutingStrategy>, ApplicationContextAware {
+
+    private ApplicationContext applicationContext;
 
     @Override
     public RoutingStrategy getObject() {
@@ -32,7 +37,9 @@ public class RoutingStrategyFactoryBean implements FactoryBean<RoutingStrategy> 
         if (!routingStrategies.iterator().hasNext()) {
             throw new IllegalArgumentException("RoutingStrategy must not be null, you must set RoutingStrategy spi in META-INF/services");
         }
-        return routingStrategies.iterator().next();
+        RoutingStrategy routingStrategy = routingStrategies.iterator().next();
+        routingStrategy.setApplicationContext(applicationContext);
+        return routingStrategy;
     }
 
     @Override
@@ -43,5 +50,10 @@ public class RoutingStrategyFactoryBean implements FactoryBean<RoutingStrategy> 
     @Override
     public boolean isSingleton() {
         return true;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

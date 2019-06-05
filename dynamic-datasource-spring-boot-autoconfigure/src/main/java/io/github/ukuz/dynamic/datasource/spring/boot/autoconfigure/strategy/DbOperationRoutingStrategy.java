@@ -21,6 +21,7 @@ import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.Dy
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.EnhancerDataSourceProperties;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -49,6 +50,9 @@ public class DbOperationRoutingStrategy implements RoutingStrategy {
             }
 
             return set.iterator().next().getName();
+        }
+        if (!key.isEmpty()) {
+            return key.iterator().next();
         }
         return null;
     }
