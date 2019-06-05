@@ -15,20 +15,14 @@
  */
 package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure;
 
-import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.DynamicDataSourceImportSelector;
-import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.DynamicRoutingDataSource;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.jdbc.mybatis.MybatisAutoConfiguration;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.DynamicDataSourceProperties;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import javax.sql.DataSource;
 
 /**
  * @author ukuz90
@@ -36,15 +30,8 @@ import javax.sql.DataSource;
  */
 @Configuration
 @ConditionalOnProperty(name = "dynamic.datasource.enable", matchIfMissing = true)
-@Import(DynamicDataSourceImportSelector.class)
 @EnableConfigurationProperties(DynamicDataSourceProperties.class)
 public class DynamicDataSourceAutoConfiguration {
-
-    @Bean
-    @ConditionalOnMissingBean(DataSource.class)
-    public DataSource dataSource() {
-        return new DynamicRoutingDataSource();
-    }
 
     @Bean
     @ConditionalOnBean(SqlSessionFactory.class)

@@ -22,9 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
@@ -40,7 +37,7 @@ import java.util.stream.Stream;
  * @author ukuz90
  * @since 2019-06-04
  */
-public class DynamicRoutingDataSource extends AbstractRoutingDataSource implements BeanPostProcessor, DisposableBean, ApplicationContextAware {
+public class DynamicRoutingDataSource extends AbstractRoutingDataSource implements DisposableBean, ApplicationContextAware {
 
     private ApplicationContext applicationContext;
     private DynamicDataSourceProperties dataSourceProperties;

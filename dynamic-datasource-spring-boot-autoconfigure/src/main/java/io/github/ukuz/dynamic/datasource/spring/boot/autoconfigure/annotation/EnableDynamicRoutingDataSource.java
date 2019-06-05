@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core;
+package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.annotation;
 
-import org.springframework.context.annotation.ImportSelector;
-import org.springframework.core.type.AnnotationMetadata;
+import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.DynamicDataSourceImportSelector;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Import;
+
+import java.lang.annotation.*;
 
 /**
  * @author ukuz90
  * @since 2019-06-05
  */
-public class DynamicDataSourceImportSelector implements ImportSelector {
-    @Override
-    public String[] selectImports(AnnotationMetadata importingClassMetadata) {
-        return new String[]{
-                DynamicRoutingDataSource.class.getName(),
-                RoutingStrategyFactoryBean.class.getName()
-        };
-    }
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@ConditionalOnProperty(name = "dynamic.datasource.enable", matchIfMissing = true)
+@Import(DynamicDataSourceImportSelector.class)
+public @interface EnableDynamicRoutingDataSource {
 }
