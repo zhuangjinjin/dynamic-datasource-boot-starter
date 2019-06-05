@@ -21,19 +21,11 @@ package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.jdbc;
  */
 public enum CrudType {
     /**
-     * 查询
+     * 读
      */
-    SELECT,
+    READ,
     /**
-     * 新增
+     * 写
      */
-    CREATE,
-    /**
-     * 修改
-     */
-    UPDATE,
-    /**
-     * 删除
-     */
-    DELETE,
+    WRITE,
 }

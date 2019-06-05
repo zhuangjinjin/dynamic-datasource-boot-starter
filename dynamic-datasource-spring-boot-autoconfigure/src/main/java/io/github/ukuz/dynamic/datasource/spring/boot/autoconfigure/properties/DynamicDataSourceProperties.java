@@ -15,8 +15,6 @@
  */
 package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties;
 
-import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -28,7 +26,7 @@ public class DynamicDataSourceProperties {
 
     private boolean enable = true;
 
-    private DataSourceProperties[] properties;
+    private EnhancerDataSourceProperties[] properties;
 
     public boolean isEnable() {
         return enable;
@@ -38,11 +36,11 @@ public class DynamicDataSourceProperties {
         this.enable = enable;
     }
 
-    public DataSourceProperties[] getProperties() {
+    public EnhancerDataSourceProperties[] getProperties() {
         return properties;
     }
 
-    public void setProperties(DataSourceProperties[] properties) {
+    public void setProperties(EnhancerDataSourceProperties[] properties) {
         this.properties = properties;
     }
 

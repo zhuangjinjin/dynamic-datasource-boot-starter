@@ -15,12 +15,16 @@
  */
 package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.strategy;
 
-import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.DynamicRoutingDataSource;
+import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.RoutingFlashUnit;
+import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.RoutingFlashUnitManager;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.DynamicDataSourceProperties;
+import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.EnhancerDataSourceProperties;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author ukuz90
@@ -33,13 +37,24 @@ public class DbOperationRoutingStrategy implements RoutingStrategy {
     @Override
     public String selectDataSourceKey(Set<String> key) {
         DynamicDataSourceProperties properties = applicationContext.getBean(DynamicDataSourceProperties.class);
+        RoutingFlashUnit data = RoutingFlashUnitManager.getData();
+        if (data != null) {
+            Set<EnhancerDataSourceProperties> set = Stream.of(properties.getProperties())
+                    .filter(props ->
+                        props.containCurdType(data.getCrudType())
+                    ).collect(Collectors.toSet());
 
+            if (set.isEmpty()) {
+                throw new IllegalArgumentException("No DataSource support " + data.getCrudType().name() + " operator");
+            }
+
+            return set.iterator().next().getName();
+        }
         return null;
     }
 
     @Override
     public void afterPropertiesSet() {
-
     }
 
     @Override

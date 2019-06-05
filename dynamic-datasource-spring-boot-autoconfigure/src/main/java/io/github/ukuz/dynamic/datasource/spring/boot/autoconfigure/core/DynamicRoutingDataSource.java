@@ -18,6 +18,8 @@ package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.DynamicDataSourceProperties;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.strategy.RoutingStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -42,6 +44,8 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
     private DynamicDataSourceProperties dataSourceProperties;
     private RoutingStrategy routingStrategy;
 
+    private static final Logger logger = LoggerFactory.getLogger(DynamicRoutingDataSource.class);
+
     @Override
     protected Object determineCurrentLookupKey() {
         if (this.dataSourceProperties.getProperties() == null) {
@@ -55,7 +59,11 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
         Stream.of(this.dataSourceProperties.getProperties())
                 .forEach(ds -> dataSourceKeys.add(ds.getName()));
 
-        return routingStrategy.selectDataSourceKey(dataSourceKeys);
+        String key = routingStrategy.selectDataSourceKey(dataSourceKeys);
+        if (logger.isDebugEnabled()) {
+            logger.debug("determineCurrentLookupKey key:{}", key);
+        }
+        return key;
     }
 
     @Override

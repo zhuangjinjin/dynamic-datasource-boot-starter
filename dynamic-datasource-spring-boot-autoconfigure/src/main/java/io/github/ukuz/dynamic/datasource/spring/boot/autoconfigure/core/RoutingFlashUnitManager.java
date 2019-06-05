@@ -25,15 +25,15 @@ public class RoutingFlashUnitManager {
 
     private static final ThreadLocal<RoutingFlashUnit> data = new ThreadLocal<>();
 
-    public void setData(RoutingFlashUnit routingFlashUnit) {
+    public static void setData(RoutingFlashUnit routingFlashUnit) {
         data.set(routingFlashUnit);
     }
 
-    public RoutingFlashUnit getData() {
+    public static RoutingFlashUnit getData() {
         return data.get();
     }
 
-    public void clearData() {
+    public static void clearData() {
         data.remove();
     }
 

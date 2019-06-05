@@ -26,7 +26,7 @@ public class RoutingFlashUnit {
     private final CrudType crudType;
     private final String tag;
 
-    public RoutingFlashUnit(CrudType crudType, String tag) {
+    private RoutingFlashUnit(CrudType crudType, String tag) {
         this.crudType = crudType;
         this.tag = tag;
     }
@@ -50,7 +50,21 @@ public class RoutingFlashUnit {
             return new RoutingFlashUnit(crudType, tag);
         }
 
+    }
 
+    public CrudType getCrudType() {
+        return crudType;
+    }
 
+    public String getTag() {
+        return tag;
+    }
+
+    @Override
+    public String toString() {
+        return "RoutingFlashUnit{" +
+                "crudType=" + crudType +
+                ", tag='" + tag + '\'' +
+                '}';
     }
 }
