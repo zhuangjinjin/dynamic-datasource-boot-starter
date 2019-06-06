@@ -20,7 +20,6 @@ import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.RoutingF
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.jdbc.CrudType;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
@@ -41,9 +40,9 @@ import java.util.Properties;
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
         @Signature(type = Executor.class, method = "queryCursor", args = {MappedStatement.class, Object.class, RowBounds.class})
 })
-public class CrudTypeDetectInterceptor implements Interceptor {
+public class MybatisCrudTypeDetectInterceptor implements Interceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(CrudTypeDetectInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(MybatisCrudTypeDetectInterceptor.class);
 
     private static final String UPDATE_METHOD = "update";
     private static final String QUERY_METHOD = "query";

@@ -30,7 +30,7 @@ public class MybatisAutoConfiguration implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         SqlSessionFactory sqlSessionFactory = applicationContext.getBean(SqlSessionFactory.class);
         if (sqlSessionFactory != null) {
-            sqlSessionFactory.getConfiguration().addInterceptor(new CrudTypeDetectInterceptor());
+            sqlSessionFactory.getConfiguration().addInterceptor(new MybatisCrudTypeDetectInterceptor());
         }
     }
 }

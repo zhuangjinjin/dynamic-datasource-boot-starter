@@ -13,12 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-dependencies {
-    implementation "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
-    implementation "org.mybatis:mybatis:${mybatisVersion}"
-    implementation "org.springframework:spring-jdbc:${springVersion}"
-//    implementation "org.springframework:spring-aop:${springVersion}"
-    implementation "com.zaxxer:HikariCP:${hikariVersion}"
-    implementation "org.aspectj:aspectjrt:${aspectjVersion}"
-    implementation "org.aspectj:aspectjweaver:${aspectjVersion}"
+package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.jdbc.springjpa;
+
+import org.aopalliance.aop.Advice;
+import org.springframework.aop.Pointcut;
+import org.springframework.aop.support.AbstractPointcutAdvisor;
+
+/**
+ * @author ukuz90
+ * @since 2019-06-06
+ */
+public class EntityManagerAdvisor extends AbstractPointcutAdvisor {
+    @Override
+    public Pointcut getPointcut() {
+        return null;
+    }
+
+    @Override
+    public Advice getAdvice() {
+        return null;
+    }
 }
