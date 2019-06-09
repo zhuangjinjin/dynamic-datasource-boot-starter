@@ -59,8 +59,8 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
                 .forEach(ds -> dataSourceKeys.add(ds.getName()));
 
         String key = routingStrategy.selectDataSourceKey(dataSourceKeys);
-        if (logger.isDebugEnabled()) {
-            logger.debug("determineCurrentLookupKey key:{}", key);
+        if (logger.isInfoEnabled()) {
+            logger.info("DynamicRoutingDataSource transfer datasource key:【{}】", key);
         }
         return key;
     }
