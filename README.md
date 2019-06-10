@@ -1,7 +1,7 @@
 # dynamic-datasource integration with spring-boot
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-dynamic-datasource-spring-boot-starter 是一个动态数据源切换的实现(可用于切换主从数据源)，目前支持`Mybtatis`和`spring-data-jpa`。
+dynamic-datasource-spring-boot-starter 是一个动态数据源切换的实现(可用于切换主从数据源)，目前支持`Mybtatis`和`spring-data-jpa`数据源，支持多数据源自动创建Schema。
 
 ## 使用
 
@@ -31,7 +31,7 @@ dynamic-datasource-spring-boot-starter 是一个动态数据源切换的实现(�
 <dependency>
    <groupId>io.github.ukuz</groupId>
    <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-   <version>1.1.0</version>
+   <version>1.2.0</version>
  </dependency>
 ```
 
@@ -40,11 +40,11 @@ dynamic-datasource-spring-boot-starter 是一个动态数据源切换的实现(�
 在build.gradle中加入nexus资源库
 
 ```groovy
-    repositories {
-        mavenLocal()
-        maven {url 'http://maven.zhuangjinjin.cn/repository/public'}
-        mavenCentral()
-    }
+repositories {
+    mavenLocal()
+    maven {url 'http://maven.zhuangjinjin.cn/repository/public'}
+    mavenCentral()
+}
 ```
 
 在build.gradle加入依赖
@@ -108,9 +108,17 @@ dynamic:
 
 ### 数据源切换策略扩展
 
-如果不想采用读写切换数据源策略，可以自定义。需要如下步骤
+如果不想采用读写切换数据源策略（默认），可以自定义。需要如下步骤
 
 * 自定义一个类实现`io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.strategy.RoutingStrategy`接口。
 * 在`META-INF/ukuz`目录下创建一个`io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.strategy.RoutingStrategy`文件，内容格式`${key}=${value}`，其中`${value}`为实现类的全路径。
-* 并且在`application.yml`中加入`dynamic.datasource.routingStrategy=${key}`，其中`${key}`是上一步中自定义的`${key}`
+* 并且在`application.yml`中加入`dynamic.datasource.routing-strategy=${key}`，其中`${key}`是上一步中自定义的`${key}`
+
+### 负载均衡算法扩展
+
+如果不想采用随机负载均衡（默认），可以自定义，需要如下步骤
+
+- 自定义一个类实现`io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.loadbalance.LoadBalance`接口。
+- 在`META-INF/ukuz`目录下创建一个`io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.loadbalance.LoadBalance`文件，内容格式`${key}=${value}`，其中`${value}`为实现类的全路径。
+- 并且在`application.yml`中加入`dynamic.datasource.loadbalance=${key}`，其中`${key}`是上一步中自定义的`${key}`
 
