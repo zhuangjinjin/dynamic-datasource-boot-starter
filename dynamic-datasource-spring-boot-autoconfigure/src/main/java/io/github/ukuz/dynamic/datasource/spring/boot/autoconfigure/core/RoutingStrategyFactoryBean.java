@@ -15,6 +15,7 @@
  */
 package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core;
 
+import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.DynamicDataSourceProperties;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.strategy.RoutingStrategy;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
@@ -33,11 +34,11 @@ public class RoutingStrategyFactoryBean implements FactoryBean<RoutingStrategy>,
 
     @Override
     public RoutingStrategy getObject() {
-        ServiceLoader<RoutingStrategy> routingStrategies = ServiceLoader.load(RoutingStrategy.class);
-        if (!routingStrategies.iterator().hasNext()) {
-            throw new IllegalArgumentException("RoutingStrategy must not be null, you must set RoutingStrategy spi in META-INF/services");
+        DynamicDataSourceProperties properties = applicationContext.getBean(DynamicDataSourceProperties.class);
+        RoutingStrategy routingStrategy = (RoutingStrategy) PluginLoader.getLoader(RoutingStrategy.class).getPlugin(properties.getRoutingStrategy());
+        if (routingStrategy == null) {
+            throw new IllegalArgumentException("RoutingStrategy must not be null, you must set RoutingStrategy spi in META-INF/ukuz");
         }
-        RoutingStrategy routingStrategy = routingStrategies.iterator().next();
         routingStrategy.setApplicationContext(applicationContext);
         return routingStrategy;
     }

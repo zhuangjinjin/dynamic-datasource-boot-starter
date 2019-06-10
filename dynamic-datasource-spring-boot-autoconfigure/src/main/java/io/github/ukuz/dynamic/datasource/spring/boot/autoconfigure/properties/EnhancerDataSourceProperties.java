@@ -20,22 +20,31 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
 public class EnhancerDataSourceProperties extends DataSourceProperties {
 
-        private CrudType[] crudTypes = new CrudType[0];
+    private CrudType[] crudTypes = new CrudType[0];
+    private int weight = 5;
 
-        public CrudType[] getCrudTypes() {
-            return crudTypes;
-        }
-
-        public void setCrudTypes(CrudType[] crudTypes) {
-            this.crudTypes = crudTypes;
-        }
-
-        public boolean containCurdType(CrudType crudType) {
-            for (CrudType ct : crudTypes) {
-                if (ct == crudType) {
-                    return true;
-                }
-            }
-            return false;
-        }
+    public CrudType[] getCrudTypes() {
+        return crudTypes;
     }
+
+    public void setCrudTypes(CrudType[] crudTypes) {
+        this.crudTypes = crudTypes;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public boolean containCurdType(CrudType crudType) {
+        for (CrudType ct : crudTypes) {
+            if (ct == crudType) {
+                return true;
+            }
+        }
+        return false;
+    }
+}

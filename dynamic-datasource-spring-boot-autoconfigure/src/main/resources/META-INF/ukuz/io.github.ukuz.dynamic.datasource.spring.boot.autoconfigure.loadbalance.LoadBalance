@@ -1,0 +1,1 @@
+random=io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.loadbalance.RandomLoadBalance

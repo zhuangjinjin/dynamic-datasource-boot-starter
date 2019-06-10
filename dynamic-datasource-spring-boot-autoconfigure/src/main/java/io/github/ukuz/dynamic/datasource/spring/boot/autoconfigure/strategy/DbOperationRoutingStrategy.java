@@ -21,8 +21,9 @@ import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.Dy
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.EnhancerDataSourceProperties;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.util.StringUtils;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -55,6 +56,25 @@ public class DbOperationRoutingStrategy implements RoutingStrategy {
             return key.iterator().next();
         }
         return null;
+    }
+
+    @Override
+    public Set<String> selectDataSourceKey(EnhancerDataSourceProperties[] properties) {
+        Set<String> keys = null;
+        RoutingFlashUnit data = RoutingFlashUnitManager.getData();
+        if (data != null) {
+            keys = Stream.of(properties)
+                    .map(props -> props.containCurdType(data.getCrudType()) ? props.getName() : null)
+                    .filter(StringUtils::hasText)
+                    .collect(Collectors.toSet());
+        } else {
+            keys = new HashSet<>();
+            keys.add(properties[0].getName());
+        }
+        if (keys.isEmpty()) {
+            throw new IllegalArgumentException("No DataSource support " + data.getCrudType().name() + " operator");
+        }
+        return keys;
     }
 
     @Override

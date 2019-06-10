@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-ext {
-    groupId = 'io.github.ukuz'
-    nexusRepoUrl = 'http://maven.zhuangjinjin.cn/repository/public/'
-    uploadUrl = 'http://maven.zhuangjinjin.cn/repository/maven-releases/'
-    projectVersion = '1.1.0'
-    projectScmUrl = "https://github.com/zhuangjinjin/${rootProject.name}"
-    springBootVersion = '2.1.2.RELEASE'
-    springVersion = '5.1.4.RELEASE'
-    springDataVersion = '2.1.4.RELEASE'
-    junitVersion = '5.3.1'
-    hikariVersion = '3.2.0'
-    mybatisVersion = "3.5.1"
-    aspectjVersion = "1.9.2"
+package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.loadbalance;
+
+import java.util.List;
+import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.Spi;
+
+/**
+ * @author ukuz90
+ * @since 2019-06-10
+ */
+@Spi
+public interface LoadBalance {
+
+    ServiceInfo select(List<ServiceInfo> serviceInfoList);
+
 }

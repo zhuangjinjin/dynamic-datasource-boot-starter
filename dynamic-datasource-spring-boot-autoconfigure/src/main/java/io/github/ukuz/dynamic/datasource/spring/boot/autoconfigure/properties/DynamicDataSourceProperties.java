@@ -28,6 +28,10 @@ public class DynamicDataSourceProperties {
 
     private EnhancerDataSourceProperties[] properties;
 
+    private String routingStrategy = "dboperation";
+
+    private String loadbalance = "random";
+
     public boolean isEnable() {
         return enable;
     }
@@ -44,4 +48,19 @@ public class DynamicDataSourceProperties {
         this.properties = properties;
     }
 
+    public String getRoutingStrategy() {
+        return routingStrategy;
+    }
+
+    public void setRoutingStrategy(String routingStrategy) {
+        this.routingStrategy = routingStrategy;
+    }
+
+    public String getLoadbalance() {
+        return loadbalance;
+    }
+
+    public void setLoadbalance(String loadbalance) {
+        this.loadbalance = loadbalance;
+    }
 }

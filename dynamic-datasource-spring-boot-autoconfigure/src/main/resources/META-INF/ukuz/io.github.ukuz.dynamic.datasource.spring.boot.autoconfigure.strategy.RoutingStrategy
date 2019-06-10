@@ -1,0 +1,1 @@
+dboperation=io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.strategy.DbOperationRoutingStrategy

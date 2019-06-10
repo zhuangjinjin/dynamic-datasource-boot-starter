@@ -15,9 +15,13 @@
  */
 package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core;
 
+
 import com.zaxxer.hikari.HikariDataSource;
+import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.loadbalance.LoadBalance;
+import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.loadbalance.ServiceInfo;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.DynamicDataSourceProperties;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.strategy.RoutingStrategy;
+import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.utils.Holder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -27,10 +31,9 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -43,7 +46,9 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
     private DynamicDataSourceProperties dataSourceProperties;
     private RoutingStrategy routingStrategy;
 
-    private static final Logger logger = LoggerFactory.getLogger(DynamicRoutingDataSource.class);
+    private ConcurrentHashMap<String, Holder<ServiceInfo>> serviceInfos = new ConcurrentHashMap<>();
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicRoutingDataSource.class);
 
     @Override
     protected Object determineCurrentLookupKey() {
@@ -54,15 +59,31 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
             return this.dataSourceProperties.getProperties()[0].getName();
         }
 
-        Set<String> dataSourceKeys = new LinkedHashSet<>();
-        Stream.of(this.dataSourceProperties.getProperties())
-                .forEach(ds -> dataSourceKeys.add(ds.getName()));
-
-        String key = routingStrategy.selectDataSourceKey(dataSourceKeys);
-        if (logger.isInfoEnabled()) {
-            logger.info("DynamicRoutingDataSource transfer datasource key:【{}】", key);
+        Set<String> dataSourceKeys = routingStrategy.selectDataSourceKey(this.dataSourceProperties.getProperties());
+        if (dataSourceKeys == null || dataSourceKeys.size() < 1) {
+            throw new IllegalArgumentException("No DataSource support");
         }
-        return key;
+
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("DynamicRoutingDataSource candidate datasource keys:【{}】", dataSourceKeys);
+        }
+
+        List<ServiceInfo> candidate = dataSourceKeys
+                .stream()
+                .map(name -> serviceInfos.get(name).getVal())
+                .collect(Collectors.toList());
+
+
+        LoadBalance loadBalance = (LoadBalance) PluginLoader.getLoader(LoadBalance.class).getPlugin(dataSourceProperties.getLoadbalance());
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("DynamicRoutingDataSource loadBalance class:【{}】", loadBalance.getClass().getName());
+        }
+        ServiceInfo selected = loadBalance.select(candidate);
+
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("DynamicRoutingDataSource transfer datasource key:【{}】", selected.getKey());
+        }
+        return selected.getKey();
     }
 
     @Override
@@ -92,8 +113,16 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
                         }
                         DataSource ds = dsp.initializeDataSourceBuilder().build();
                         targetDataSource.put(dsp.getName(), ds);
+
+                        Holder holder = this.serviceInfos.get(dsp.getName());
+                        if (holder == null) {
+                            this.serviceInfos.putIfAbsent(dsp.getName(), new Holder<>());
+                            holder = this.serviceInfos.get(dsp.getName());
+                        }
+                        holder.setVal(new ServiceInfo(dsp.getName(), dsp.getWeight()));
                     });
             this.setTargetDataSources(targetDataSource);
+
         }
         routingStrategy = applicationContext.getBean(RoutingStrategy.class);
     }

@@ -38,12 +38,14 @@ public class DynamicDataSourceAutoConfiguration {
 
     @Bean
     @ConditionalOnBean(SqlSessionFactory.class)
+    @ConditionalOnProperty(name = "dynamic.datasource.routing-strategy", havingValue = "dboperation", matchIfMissing = true)
     public MybatisAutoConfiguration mybatisAutoConfiguration() {
         return new MybatisAutoConfiguration();
     }
 
     @Bean
     @ConditionalOnClass(RepositoryQuery.class)
+    @ConditionalOnProperty(name = "dynamic.datasource.routing-strategy", havingValue = "dboperation", matchIfMissing = true)
     public RepositoryAutoProxyCreator autoProxyCreator() {
         return new RepositoryAutoProxyCreator();
     }
