@@ -15,7 +15,6 @@
  */
 package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.strategy;
 
-import java.util.List;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.Spi;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.EnhancerDataSourceProperties;
 import org.springframework.beans.factory.InitializingBean;
@@ -36,7 +35,9 @@ public interface RoutingStrategy extends InitializingBean, ApplicationContextAwa
      * @return
      */
     @Deprecated
-    String selectDataSourceKey(Set<String> key);
+    default String selectDataSourceKey(Set<String> key) {
+        return null;
+    }
 
     Set<String> selectDataSourceKey(EnhancerDataSourceProperties[] properties);
 }
