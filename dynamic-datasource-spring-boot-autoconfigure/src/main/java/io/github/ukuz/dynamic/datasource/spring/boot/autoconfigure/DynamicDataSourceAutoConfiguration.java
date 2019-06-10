@@ -15,6 +15,7 @@
  */
 package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure;
 
+import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.MultipleDataSourceSchemaInitializer;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.jdbc.mybatis.MybatisAutoConfiguration;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.jdbc.springjpa.RepositoryAutoProxyCreator;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.DynamicDataSourceProperties;
@@ -26,6 +27,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.query.RepositoryQuery;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
  * @author ukuz90
@@ -48,6 +50,13 @@ public class DynamicDataSourceAutoConfiguration {
     @ConditionalOnProperty(name = "dynamic.datasource.routing-strategy", havingValue = "dboperation", matchIfMissing = true)
     public RepositoryAutoProxyCreator autoProxyCreator() {
         return new RepositoryAutoProxyCreator();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "spring.jpa.hibernate.ddl-auto")
+    @ConditionalOnClass(LocalContainerEntityManagerFactoryBean.class)
+    public MultipleDataSourceSchemaInitializer multipleDataSourceSchemaInitializer() {
+        return new MultipleDataSourceSchemaInitializer();
     }
 
 }

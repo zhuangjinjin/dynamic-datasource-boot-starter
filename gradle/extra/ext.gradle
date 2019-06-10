@@ -17,13 +17,14 @@ ext {
     groupId = 'io.github.ukuz'
     nexusRepoUrl = 'http://maven.zhuangjinjin.cn/repository/public/'
     uploadUrl = 'http://maven.zhuangjinjin.cn/repository/maven-releases/'
-    projectVersion = '1.1.0'
+    projectVersion = '1.2.0'
     projectScmUrl = "https://github.com/zhuangjinjin/${rootProject.name}"
     springBootVersion = '2.1.2.RELEASE'
     springVersion = '5.1.4.RELEASE'
     springDataVersion = '2.1.4.RELEASE'
     junitVersion = '5.3.1'
     hikariVersion = '3.2.0'
-    mybatisVersion = "3.5.1"
-    aspectjVersion = "1.9.2"
+    mybatisVersion = '3.5.1'
+    aspectjVersion = '1.9.2'
+    javaPersistenceVersion = '2.2'
 }

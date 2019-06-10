@@ -20,15 +20,16 @@ import com.zaxxer.hikari.HikariDataSource;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.loadbalance.LoadBalance;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.loadbalance.ServiceInfo;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.DynamicDataSourceProperties;
+import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.properties.EnhancerDataSourceProperties;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.strategy.RoutingStrategy;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.utils.Holder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.*;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.util.*;
@@ -47,6 +48,7 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
     private RoutingStrategy routingStrategy;
 
     private ConcurrentHashMap<String, Holder<ServiceInfo>> serviceInfos = new ConcurrentHashMap<>();
+    private Holder<String> determineDatasourceKey = new Holder<>();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicRoutingDataSource.class);
 
@@ -57,6 +59,15 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
         }
         if (this.dataSourceProperties.getProperties().length == 1) {
             return this.dataSourceProperties.getProperties()[0].getName();
+        }
+
+        //直接选出数据源
+        if (!StringUtils.isEmpty(determineDatasourceKey.getVal())) {
+            String determineDataSourceKey = determineDatasourceKey.getVal();
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("DynamicRoutingDataSource determineDatasourceKey key:【{}】", determineDataSourceKey);
+            }
+            return determineDataSourceKey;
         }
 
         Set<String> dataSourceKeys = routingStrategy.selectDataSourceKey(this.dataSourceProperties.getProperties());
@@ -95,6 +106,11 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+        if (applicationContext instanceof ConfigurableApplicationContext) {
+            ((ConfigurableApplicationContext)applicationContext).addApplicationListener(new DetermineDataSourceListener());
+            ((ConfigurableApplicationContext)applicationContext).addApplicationListener(new ClearDetermineDataSourceListenr());
+        }
+
     }
 
     @Override
@@ -125,5 +141,65 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
 
         }
         routingStrategy = applicationContext.getBean(RoutingStrategy.class);
+    }
+
+    private boolean checkDataSourceKeyValid(String key) {
+        DynamicDataSourceProperties properties = applicationContext.getBean(DynamicDataSourceProperties.class);
+        if (properties.getProperties() == null) {
+            return false;
+        }
+        for (EnhancerDataSourceProperties prop : properties.getProperties()) {
+            if (prop.getName().equals(key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static class DetermineDataSourceEvent extends ApplicationEvent {
+
+        private final String datasourceKey;
+
+        /**
+         * Create a new ApplicationEvent.
+         *
+         * @param source the object on which the event initially occurred (never {@code null})
+         */
+        public DetermineDataSourceEvent(String source) {
+            super(source);
+            this.datasourceKey = source;
+        }
+
+        public String getDatasourceKey() {
+            return datasourceKey;
+        }
+
+    }
+
+    static class ClearDetermineDataSourceEvent {
+
+    }
+
+    class DetermineDataSourceListener implements ApplicationListener<DetermineDataSourceEvent> {
+
+        @Override
+        public void onApplicationEvent(DetermineDataSourceEvent event) {
+            if (!checkDataSourceKeyValid(event.getDatasourceKey())) {
+                LOGGER.error("DynamicRoutingDataSource received invalid datasourceKey:{}", event.getDatasourceKey());
+                return;
+            }
+            determineDatasourceKey.setVal(event.getDatasourceKey());
+        }
+    }
+
+    class ClearDetermineDataSourceListenr implements ApplicationListener<PayloadApplicationEvent> {
+
+        @Override
+        public void onApplicationEvent(PayloadApplicationEvent event) {
+            if (!(event.getPayload() instanceof ClearDetermineDataSourceEvent)) {
+                return;
+            }
+            determineDatasourceKey.setVal(null);
+        }
     }
 }
