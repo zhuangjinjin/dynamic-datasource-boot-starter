@@ -74,9 +74,9 @@ public class FooApplication {
 
 ### Springboot 外部化配置
 
-在application.yml中设置相关信息
+在`application.yml`中设置相关信息
 
-```properties
+```yaml
 dynamic:
   datasource:
     enable: true
@@ -100,6 +100,30 @@ dynamic:
       weight: 5
       crud-types:
       - READ
+```
+
+或者，在`application.properties`设置相关信息
+
+```properties
+dynamic.datasource.enable=true
+dynamic.datasource.routing-strategy=dboperation
+dynamic.datasource.loadbalance=random
+
+dynamic.datasource.properties[0].name=master
+dynamic.datasource.properties[0].driver-class-name=com.mysql.cj.jdbc.Driver
+dynamic.datasource.properties[0].url=jdbc:mysql://localhost/test
+dynamic.datasource.properties[0].username=root
+dynamic.datasource.properties[0].password=123456
+dynamic.datasource.properties[0].weight=5
+dynamic.datasource.properties[0].crud-types=WRITE,READ
+
+dynamic.datasource.properties[1].name=slave
+dynamic.datasource.properties[1].driver-class-name=com.mysql.cj.jdbc.Driver
+dynamic.datasource.properties[1].url=jdbc:mysql://localhost/test_2
+dynamic.datasource.properties[1].username=root
+dynamic.datasource.properties[1].password=123456
+dynamic.datasource.properties[1].weight=5
+dynamic.datasource.properties[1].crud-types=READ
 ```
 
 
