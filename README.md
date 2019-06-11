@@ -1,7 +1,7 @@
 # dynamic-datasource integration with spring-boot
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-dynamic-datasource-spring-boot-starter 是一个动态数据源切换的实现(可用于切换主从数据源)，目前支持`Mybtatis`和`spring-data-jpa`数据源，支持多数据源自动创建Schema。
+dynamic-datasource-spring-boot-starter 是一个动态数据源切换的实现(可用于切换主从数据源)，目前支持`Mybtatis`和`spring-data-jpa`等ORM框架，并且支持多数据源自动创建Schema。
 
 ## 使用
 
