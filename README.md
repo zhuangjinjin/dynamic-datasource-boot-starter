@@ -31,8 +31,8 @@ dynamic-datasource-spring-boot-starter 是一个动态数据源切换的实现(�
 <dependency>
    <groupId>io.github.ukuz</groupId>
    <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-   <version>1.2.0</version>
- </dependency>
+   <version>1.2.1</version>
+</dependency>
 ```
 
 ### Gradle
