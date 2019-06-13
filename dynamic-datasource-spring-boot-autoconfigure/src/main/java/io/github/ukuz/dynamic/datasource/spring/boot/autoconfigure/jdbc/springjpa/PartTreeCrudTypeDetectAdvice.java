@@ -18,11 +18,11 @@ package io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.jdbc.springj
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.RoutingFlashUnit;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.RoutingFlashUnitManager;
 import io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.jdbc.CrudType;
-import org.junit.jupiter.api.Assertions;
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.aop.MethodBeforeAdvice;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.parser.PartTree;
+import org.springframework.util.Assert;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -71,8 +71,8 @@ public class PartTreeCrudTypeDetectAdvice implements MethodBeforeAdvice, AfterRe
     }
 
     private Class getDomainClass(Method method) throws ClassNotFoundException {
-        Assertions.assertTrue(Repository.class.isAssignableFrom(method.getDeclaringClass()));
-        Assertions.assertTrue(method.getDeclaringClass().getGenericInterfaces().length > 0);
+        Assert.isTrue(Repository.class.isAssignableFrom(method.getDeclaringClass()), method.getDeclaringClass() + "must implement Repository");
+        Assert.isTrue(method.getDeclaringClass().getGenericInterfaces().length > 0, method.getDeclaringClass() + "must have generic type");
 
         Type[] types = method.getDeclaringClass().getGenericInterfaces();
         for (Type type : types) {
@@ -81,7 +81,7 @@ public class PartTreeCrudTypeDetectAdvice implements MethodBeforeAdvice, AfterRe
 
                 if (Repository.class.isAssignableFrom(getClass(pt.getRawType().getTypeName()))) {
                     Type[] repostioryPairType = pt.getActualTypeArguments();
-                    Assertions.assertTrue(repostioryPairType.length > 0);
+                    Assert.isTrue(repostioryPairType.length > 0, method.getDeclaringClass() + "'must have generic type");
                     return getClass(repostioryPairType[0].getTypeName());
                 }
             }

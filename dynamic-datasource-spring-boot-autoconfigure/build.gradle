@@ -23,5 +23,5 @@ dependencies {
     implementation "com.zaxxer:HikariCP:${hikariVersion}"
     implementation "org.springframework.data:spring-data-jpa:${springDataVersion}"
     implementation "javax.persistence:javax.persistence-api:${javaPersistenceVersion}"
-    implementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
 }
