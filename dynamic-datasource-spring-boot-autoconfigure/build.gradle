@@ -24,4 +24,5 @@ dependencies {
     implementation "org.springframework.data:spring-data-jpa:${springDataVersion}"
     implementation "javax.persistence:javax.persistence-api:${javaPersistenceVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 }

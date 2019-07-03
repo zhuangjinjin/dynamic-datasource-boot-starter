@@ -1,0 +1,16 @@
+language: java
+sudo: false # faster builds
+
+jdk:
+  - oraclejdk8
+
+#cache:
+#  - directories:
+#    - $HOME/
+
+script:
+  - gradle check
+  - gradle codeCoverageReport
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

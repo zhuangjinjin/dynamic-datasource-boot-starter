@@ -18,6 +18,7 @@ subprojects {
     apply from: "$rootDir/gradle/extra/compile.gradle"
     apply from: "$rootDir/gradle/extra/ext.gradle"
     apply from: "$rootDir/gradle/extra/publish.gradle"
+    apply from: "$rootDir/gradle/extra/test.gradle"
 
     group "${groupId}"
     version "${projectVersion}"
