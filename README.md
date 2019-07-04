@@ -1,5 +1,5 @@
 # dynamic-datasource integration with spring-boot
-[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)[![Build Status](https://travis-ci.org/zhuangjinjin/dynamic-datasource-boot-starter.svg?branch=master)](https://travis-ci.org/zhuangjinjin/dynamic-datasource-boot-starter)[![codecov](https://codecov.io/gh/zhuangjinjin/dynamic-datasource-boot-starter/branch/master/graph/badge.svg)](https://codecov.io/gh/zhuangjinjin/dynamic-datasource-boot-starter)
+[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)[![Build Status](https://travis-ci.org/zhuangjinjin/dynamic-datasource-boot-starter.svg?branch=)](https://travis-ci.org/zhuangjinjin/dynamic-datasource-boot-starter)[![codecov](https://codecov.io/gh/zhuangjinjin/dynamic-datasource-boot-starter/branch/master/graph/badge.svg)](https://codecov.io/gh/zhuangjinjin/dynamic-datasource-boot-starter)
 
 dynamic-datasource-spring-boot-starter 是一个动态数据源切换的实现(可用于切换主从数据源)，目前支持`Mybtatis`和`spring-data-jpa`等ORM框架，并且支持多数据源自动创建Schema。
 

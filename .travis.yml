@@ -15,7 +15,8 @@ cache:
 
 script:
   - gradle check
-  - gradle codeCoverageReport
+  - gradle jacocoTestReport
+#  - gradle codeCoverageReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
