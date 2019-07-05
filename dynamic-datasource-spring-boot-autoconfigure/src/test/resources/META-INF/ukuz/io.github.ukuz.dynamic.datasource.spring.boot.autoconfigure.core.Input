@@ -1,0 +1,3 @@
+simple=io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.SimpleInput
+
+io.github.ukuz.dynamic.datasource.spring.boot.autoconfigure.core.HelloInput

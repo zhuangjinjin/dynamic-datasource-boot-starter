@@ -49,13 +49,13 @@ public class PluginLoader<T> {
 
     public static PluginLoader getLoader(Class<?> clazz) {
         if (clazz == null) {
-            throw new IllegalArgumentException("Plugin class must not be null");
+            throw new IllegalArgumentException("Plugin type must not be null");
         }
         if (!clazz.isInterface()) {
-            throw new IllegalArgumentException("Plugin class " + clazz + " is not an interface!");
+            throw new IllegalArgumentException("Plugin type " + clazz + " is not an interface!");
         }
         if (!clazz.isAnnotationPresent(Spi.class)) {
-            throw new IllegalArgumentException("Plugin class " + clazz + " must annotated with @Spi");
+            throw new IllegalArgumentException("Plugin type " + clazz + " must annotated with @Spi");
         }
         PluginLoader loader = LOADERS.get(clazz);
         if (loader == null) {
@@ -74,7 +74,7 @@ public class PluginLoader<T> {
         Map<String, Class<T>> pluginClass = getPluginClass();
         Class<T> clazz = pluginClass.get(key);
         if (clazz == null) {
-            throw new IllegalArgumentException("Can not found " + key + "mapping class");
+            throw new IllegalArgumentException("Can not found " + key + " mapping class");
         }
 
         Holder holder = INSTANCES.get(clazz);
