@@ -1,4 +1,5 @@
 # dynamic-datasource integration with spring-boot
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9d1b582e9e26439d9b24b7cd620422b2)](https://app.codacy.com/app/zhuangjinjin/dynamic-datasource-boot-starter?utm_source=github.com&utm_medium=referral&utm_content=zhuangjinjin/dynamic-datasource-boot-starter&utm_campaign=Badge_Grade_Dashboard)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Build Status](https://travis-ci.org/zhuangjinjin/dynamic-datasource-boot-starter.svg?branch=)](https://travis-ci.org/zhuangjinjin/dynamic-datasource-boot-starter)
 [![codecov](https://codecov.io/gh/zhuangjinjin/dynamic-datasource-boot-starter/branch/dev/graph/badge.svg)](https://codecov.io/gh/zhuangjinjin/dynamic-datasource-boot-starter)
