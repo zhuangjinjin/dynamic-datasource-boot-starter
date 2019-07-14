@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RoutingFlashUnitManagerTest {
 
-    @DisplayName("RoutingFlashUnitManager_setData")
+    @DisplayName("test_setData")
     @Test
-    void setData() {
+    void test_setData() {
         RoutingFlashUnitManager.setData(new RoutingFlashUnit.Builder().crudType(CrudType.READ).build());
         assertEquals(CrudType.READ, RoutingFlashUnitManager.getData().getCrudType());
 
@@ -25,9 +25,9 @@ class RoutingFlashUnitManagerTest {
 
     }
 
-    @DisplayName("RoutingFlashUnitManager_clearData")
+    @DisplayName("test_clearData")
     @Test
-    void clearData() {
+    void test_clearData() {
         RoutingFlashUnitManager.setData(new RoutingFlashUnit.Builder().crudType(CrudType.READ).build());
         RoutingFlashUnitManager.clearData();
         assertNull(RoutingFlashUnitManager.getData());

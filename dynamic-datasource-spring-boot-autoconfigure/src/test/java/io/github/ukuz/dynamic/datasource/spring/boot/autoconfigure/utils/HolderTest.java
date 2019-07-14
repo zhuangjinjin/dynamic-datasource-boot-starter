@@ -20,19 +20,19 @@ class HolderTest {
         holder = new Holder<>();
     }
 
-    @DisplayName("setValOne")
+    @DisplayName("test_setVal_One")
     @ResourceLock(value = "message", mode = ResourceAccessMode.READ_WRITE)
     @Test
-    void setValOne() {
+    void test_setVal_One() {
         String message = "one";
         holder.setVal(message);
         assertEquals(message, holder.getVal());
     }
 
-    @DisplayName("setValTwo")
+    @DisplayName("test_setVal_Two")
     @ResourceLock(value = "message", mode = ResourceAccessMode.READ_WRITE)
     @Test
-    void setValTwo() {
+    void test_setVal_Two() {
         String message = "two";
         holder.setVal(message);
         assertEquals(message, holder.getVal());
